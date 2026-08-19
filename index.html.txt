@@ -1,0 +1,475 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<title>Roblox</title>
+<style>
+*{margin:0;padding:0;box-sizing:border-box;-webkit-tap-highlight-color:transparent;user-select:none}
+body{font-family:system-ui,-apple-system,BlinkMacSystemFont,sans-serif;background:#0a0a0a;color:#fff;overflow:hidden;height:100dvh}
+
+/* ========== SIGNUP ========== */
+#signup-screen{min-height:100dvh;display:flex;flex-direction:column;position:relative}
+.bg-mosaic{position:fixed;inset:0;background:#0a0a0a;z-index:0}
+.bg-mosaic::before{content:"";position:absolute;inset:-30%;background:radial-gradient(circle at 20% 30%,#1a1a2e 0%,transparent 40%),radial-gradient(circle at 80% 20%,#16213e 0%,transparent 35%),radial-gradient(circle at 40% 80%,#0f3460 0%,transparent 40%)}
+.top-bar{position:relative;z-index:10;display:flex;justify-content:flex-end;padding:16px}
+.login-btn{background:#fff;color:#000;border:none;border-radius:999px;padding:10px 22px;font-weight:600;font-size:15px}
+.main{position:relative;z-index:5;display:flex;flex-direction:column;align-items:center;padding:20px 16px}
+.logo{font-size:48px;font-weight:900;margin:24px 0 28px;letter-spacing:-1px}
+.card{width:100%;max-width:400px;background:#1a1a1a;border-radius:18px;padding:28px 20px;box-shadow:0 10px 40px rgba(0,0,0,0.5)}
+.card h2{font-size:17px;font-weight:700;text-align:center;margin-bottom:22px}
+.field{margin-bottom:16px}
+.field label{display:block;font-size:13px;font-weight:600;margin-bottom:6px;color:#ddd}
+.birthday-row{display:flex;gap:8px}
+.birthday-row select,.card input{width:100%;background:#2a2a2a;border:1px solid #3a3a3a;border-radius:10px;color:#fff;padding:13px;font-size:15px}
+.gender-row{display:flex;border:1px solid #3a3a3a;border-radius:10px;overflow:hidden}
+.gender-btn{flex:1;background:#2a2a2a;border:none;color:#aaa;padding:14px;font-size:20px}
+.gender-btn.active{background:#3a3a3a;color:#fff}
+.legal{font-size:12px;color:#999;margin:16px 0;line-height:1.45}
+.legal a{color:#4a9eff}
+.signup-btn{width:100%;background:#00a2ff;color:#fff;border:none;border-radius:10px;padding:15px;font-size:16px;font-weight:700}
+
+/* ========== HOME ========== */
+#home-screen{display:none;min-height:100dvh;flex-direction:column;background:#0f0f0f;padding-bottom:70px;overflow-y:auto}
+.home-header{display:flex;justify-content:space-between;align-items:center;padding:14px 16px;background:#1a1a1a;position:sticky;top:0;z-index:20}
+.home-logo{font-size:22px;font-weight:900}
+.robux-bal{background:#222;padding:7px 14px;border-radius:20px;font-size:14px;font-weight:700;display:flex;align-items:center;gap:5px}
+.section{padding:18px 16px 8px}
+.section-title{font-size:18px;font-weight:700;margin-bottom:14px}
+.games-scroll{display:flex;gap:12px;overflow-x:auto;scrollbar-width:none;padding-bottom:10px}
+.games-scroll::-webkit-scrollbar{display:none}
+.game-card{flex:0 0 148px;background:#1c1c1c;border-radius:14px;overflow:hidden;box-shadow:0 4px 15px rgba(0,0,0,0.3)}
+.game-thumb{height:148px;display:flex;align-items:center;justify-content:center;font-size:46px;background:linear-gradient(145deg,#252545,#151525)}
+.game-info{padding:11px}
+.game-name{font-size:13px;font-weight:600;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.game-players{font-size:11px;color:#aaa;margin-top:3px}
+.bottom-nav{position:fixed;bottom:0;left:0;right:0;height:64px;background:#1a1a1a;border-top:1px solid #2a2a2a;display:flex;justify-content:space-around;align-items:center;z-index:30}
+.nav-item{display:flex;flex-direction:column;align-items:center;gap:3px;font-size:11px;color:#777}
+.nav-item.active{color:#fff}
+.nav-item span{font-size:22px}
+
+/* ========== AVATAR ========== */
+#avatar-screen{display:none;height:100dvh;flex-direction:column;background:#0f0f0f;overflow:hidden}
+.avatar-scroll{flex:1;overflow-y:auto;-webkit-overflow-scrolling:touch;padding-bottom:90px}
+.avatar-header{padding:14px 16px;background:#1a1a1a;display:flex;justify-content:space-between;align-items:center;position:sticky;top:0;z-index:20}
+.avatar-preview{width:100%;height:210px;background:linear-gradient(180deg,#1a1a2e,#0f0f0f);display:flex;align-items:center;justify-content:center}
+.big-avatar{width:95px;height:125px;position:relative}
+.big-body{width:100%;height:100%;border-radius:14px 14px 10px 10px;background:#00a2ff;position:relative;box-shadow:0 10px 0 rgba(0,0,0,0.35)}
+.big-head{position:absolute;top:-30px;left:50%;transform:translateX(-50%);width:50px;height:50px;background:#ffdbac;border-radius:50%;border:3px solid #222}
+.big-face{position:absolute;top:15px;left:11px;width:28px;display:flex;justify-content:space-between}
+.big-eye{width:7px;height:7px;background:#111;border-radius:50%}
+.equipped-hat{position:absolute;top:-58px;left:50%;transform:translateX(-50%);font-size:44px}
+.equipped-face{position:absolute;top:9px;left:50%;transform:translateX(-50%);font-size:24px}
+.robux-input-row{display:flex;gap:10px;padding:16px;background:#161616;align-items:center}
+.robux-input-row input{flex:1;padding:13px 14px;background:#2a2a2a;border:1px solid #3a3a3a;border-radius:10px;color:#fff;font-size:15px}
+.robux-input-row button{padding:13px 18px;background:#00a2ff;border:none;border-radius:10px;color:#fff;font-weight:700}
+.shop-section{padding:16px}
+.shop-tabs{display:flex;gap:8px;margin-bottom:16px;overflow-x:auto}
+.shop-tab{padding:9px 16px;background:#2a2a2a;border-radius:20px;font-size:13px;font-weight:600;white-space:nowrap}
+.shop-tab.active{background:#00a2ff}
+.items-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:12px}
+.item-card{background:#1c1c1c;border-radius:12px;padding:12px;text-align:center}
+.item-icon{font-size:36px;margin-bottom:8px}
+.item-name{font-size:12px;font-weight:600;margin-bottom:4px}
+.item-price{font-size:13px;color:#f1c40f;font-weight:700;margin-bottom:8px}
+.buy-btn{width:100%;padding:8px;background:#00a2ff;border:none;border-radius:8px;color:#fff;font-size:12px;font-weight:700}
+
+/* ========== 3D GAME ========== */
+#game-screen{display:none;position:fixed;inset:0;overflow:hidden;background:#000;perspective:900px}
+#world{position:absolute;width:3200px;height:3200px;transform-style:preserve-3d}
+.ground{position:absolute;inset:0;background:linear-gradient(rgba(255,255,255,0.07) 2px,transparent 2px),linear-gradient(90deg,rgba(255,255,255,0.07) 2px,transparent 2px);background-size:90px 90px;transform:rotateX(58deg) translateZ(-120px);transform-origin:center top}
+#player{position:absolute;width:52px;height:72px;z-index:100;transform-style:preserve-3d}
+.p-body{width:100%;height:100%;border-radius:13px 13px 9px 9px;position:relative;box-shadow:0 12px 25px rgba(0,0,0,0.55);transform:translateZ(25px)}
+.p-head{position:absolute;top:-26px;left:50%;transform:translateX(-50%) translateZ(35px);width:36px;height:36px;background:#ffdbac;border-radius:50%;border:2.5px solid #222;box-shadow:0 5px 12px rgba(0,0,0,0.4)}
+.p-face{position:absolute;top:11px;left:8px;width:20px;display:flex;justify-content:space-between}
+.eye{width:5px;height:5px;background:#111;border-radius:50%}
+.p-hat{position:absolute;top:-55px;left:50%;transform:translateX(-50%) translateZ(45px);font-size:32px}
+
+.obj{position:absolute;transform-style:preserve-3d}
+.tree{width:42px;height:75px;background:#2d5a1e;border-radius:6px;box-shadow:0 18px 30px rgba(0,0,0,0.45)}
+.tree::before{content:"";position:absolute;top:-42px;left:-26px;width:94px;height:65px;background:#3a7a2a;border-radius:50%;box-shadow:0 12px 20px rgba(0,0,0,0.3)}
+.house{width:110px;height:85px;background:#c45c26;border-radius:8px;box-shadow:0 22px 35px rgba(0,0,0,0.5)}
+.house::before{content:"";position:absolute;top:-42px;left:-16px;width:142px;height:55px;background:#8b3a1a;clip-path:polygon(50% 0%,0% 100%,100% 100%)}
+.rock{width:52px;height:38px;background:#777;border-radius:40%;box-shadow:0 12px 18px rgba(0,0,0,0.4)}
+.palm{width:24px;height:95px;background:#8B4513;border-radius:5px}
+.palm::before{content:"";position:absolute;top:-32px;left:-42px;width:108px;height:70px;background:#228B22;border-radius:50%}
+.boat{width:110px;height:42px;background:#8B4513;border-radius:0 0 32px 32px;box-shadow:0 16px 28px rgba(0,0,0,0.4)}
+.pet-house{width:85px;height:70px;background:#ff9ff3;border-radius:16px;display:flex;align-items:center;justify-content:center;font-size:34px;box-shadow:0 16px 28px rgba(0,0,0,0.3)}
+.rainbow{width:140px;height:70px;background:linear-gradient(90deg,#ff0000,#ff7f00,#ffff00,#00ff00,#0000ff,#4b0082,#9400d3);border-radius:140px 140px 0 0;opacity:0.9;box-shadow:0 12px 30px rgba(0,0,0,0.3)}
+.door{width:58px;height:100px;background:#4a3728;border:5px solid #2a1f15;border-radius:6px;box-shadow:0 18px 28px rgba(0,0,0,0.5)}
+.wall{width:170px;height:120px;background:#2c2c2c;border:4px solid #111;box-shadow:0 22px 35px rgba(0,0,0,0.5)}
+.car{width:100px;height:48px;background:#e74c3c;border-radius:12px;box-shadow:0 16px 28px rgba(0,0,0,0.4)}
+.prison{width:150px;height:120px;background:#555;border:6px solid #333;display:flex;align-items:center;justify-content:center;font-size:42px;box-shadow:0 22px 35px rgba(0,0,0,0.5)}
+.coin{width:38px;height:38px;background:radial-gradient(circle at 30% 30%,#ffeaa7,#f1c40f);border-radius:50%;box-shadow:0 0 22px #f1c40f,0 10px 18px rgba(0,0,0,0.4);display:flex;align-items:center;justify-content:center;font-size:18px;font-weight:900;color:#000;animation:spin 3.5s linear infinite}
+.fruit{width:46px;height:46px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:32px;filter:drop-shadow(0 10px 16px rgba(0,0,0,0.4))}
+.pet{width:58px;height:58px;display:flex;align-items:center;justify-content:center;font-size:40px;animation:float 1.7s ease-in-out infinite;filter:drop-shadow(0 12px 18px rgba(0,0,0,0.3))}
+
+@keyframes float{0%,100%{transform:translateY(0) translateZ(25px)}50%{transform:translateY(-14px) translateZ(40px)}}
+@keyframes spin{from{transform:rotateY(0)}to{transform:rotateY(360deg)}}
+
+.game-hud{position:absolute;top:0;left:0;right:0;padding:14px 16px;display:flex;justify-content:space-between;align-items:center;background:linear-gradient(to bottom,rgba(0,0,0,0.8),transparent);z-index:200}
+.hud-left{display:flex;flex-direction:column;gap:2px}
+.game-name-hud{font-size:17px;font-weight:800;text-shadow:0 2px 8px #000}
+.score{font-size:14px;opacity:0.9}
+.leave-btn{background:#e74c3c;color:#fff;border:none;border-radius:10px;padding:9px 18px;font-size:14px;font-weight:700}
+.controls{position:absolute;bottom:30px;left:0;right:0;display:flex;justify-content:space-between;padding:0 22px;z-index:200;pointer-events:none}
+.joystick-area{width:150px;height:150px;background:rgba(255,255,255,0.13);border-radius:50%;position:relative;pointer-events:auto;touch-action:none;border:2px solid rgba(255,255,255,0.22)}
+.joystick-knob{width:64px;height:64px;background:rgba(255,255,255,0.5);border-radius:50%;position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);pointer-events:none;box-shadow:0 5px 18px rgba(0,0,0,0.4)}
+.jump-btn{width:90px;height:90px;background:rgba(255,255,255,0.2);border:3px solid rgba(255,255,255,0.45);border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:15px;font-weight:800;pointer-events:auto;margin-top:30px}
+.hint{position:absolute;top:78px;left:50%;transform:translateX(-50%);background:rgba(0,0,0,0.65);padding:8px 18px;border-radius:20px;font-size:13px;z-index:200;pointer-events:none}
+</style>
+</head>
+<body>
+
+<div id="signup-screen">
+  <div class="bg-mosaic"></div>
+  <div class="top-bar"><button class="login-btn" onclick="goHome()">Log In</button></div>
+  <div class="main">
+    <div class="logo">ROBLOX</div>
+    <div class="card">
+      <h2>SIGN UP AND START HAVING FUN!</h2>
+      <div class="field"><label>Birthday</label><div class="birthday-row"><select><option>Month</option></select><select><option>Day</option></select><select><option>Year</option></select></div></div>
+      <div class="field"><label>Username</label><input type="text" placeholder="Don't use your real name"></div>
+      <div class="field"><label>Password</label><input type="password" placeholder="At least 8 characters"></div>
+      <div class="field"><label>Gender (optional)</label><div class="gender-row"><button class="gender-btn" onclick="this.classList.toggle('active')">♀</button><button class="gender-btn" onclick="this.classList.toggle('active')">♂</button></div></div>
+      <p class="legal">By clicking Sign Up, you are agreeing to our <a href="#">Terms</a> and <a href="#">Privacy Policy</a>.</p>
+      <button class="signup-btn" onclick="goHome()">Sign Up</button>
+    </div>
+  </div>
+</div>
+
+<div id="home-screen">
+  <div class="home-header">
+    <div class="home-logo">ROBLOX</div>
+    <div class="robux-bal">R$ <span id="robux-display">100</span></div>
+  </div>
+  <div class="section"><div class="section-title">Continue</div><div class="games-scroll" id="continue-games"></div></div>
+  <div class="section"><div class="section-title">Popular</div><div class="games-scroll" id="popular-games"></div></div>
+  <div class="section"><div class="section-title">Recommended</div><div class="games-scroll" id="recommended-games"></div></div>
+  <div class="bottom-nav">
+    <div class="nav-item active" onclick="showScreen('home')"><span>🏠</span>Home</div>
+    <div class="nav-item" onclick="showScreen('home')"><span>🧭</span>Discover</div>
+    <div class="nav-item" onclick="showScreen('avatar')"><span>🧍</span>Avatar</div>
+    <div class="nav-item"><span>💬</span>Chat</div>
+    <div class="nav-item"><span>⋯</span>More</div>
+  </div>
+</div>
+
+<div id="avatar-screen">
+  <div class="avatar-header">
+    <div style="font-size:18px;font-weight:800">Avatar</div>
+    <div class="robux-bal">R$ <span id="robux-display2">100</span></div>
+  </div>
+  <div class="avatar-scroll">
+    <div class="avatar-preview">
+      <div class="big-avatar">
+        <div class="big-body" id="big-body">
+          <div class="big-head">
+            <div class="big-face"><div class="big-eye"></div><div class="big-eye"></div></div>
+            <div class="equipped-face" id="eq-face"></div>
+          </div>
+          <div class="equipped-hat" id="eq-hat"></div>
+        </div>
+      </div>
+    </div>
+    <div class="robux-input-row">
+      <input type="text" id="promo-input" placeholder="Type 9211 or amount...">
+      <button onclick="redeemCode()">Go</button>
+    </div>
+    <div class="shop-section">
+      <div class="shop-tabs">
+        <div class="shop-tab active" onclick="showCategory('hats',this)">Hats</div>
+        <div class="shop-tab" onclick="showCategory('faces',this)">Faces</div>
+        <div class="shop-tab" onclick="showCategory('clothes',this)">Clothes</div>
+        <div class="shop-tab" onclick="showCategory('accessories',this)">Accessories</div>
+      </div>
+      <div class="items-grid" id="items-grid"></div>
+    </div>
+  </div>
+  <div class="bottom-nav">
+    <div class="nav-item" onclick="showScreen('home')"><span>🏠</span>Home</div>
+    <div class="nav-item" onclick="showScreen('home')"><span>🧭</span>Discover</div>
+    <div class="nav-item active" onclick="showScreen('avatar')"><span>🧍</span>Avatar</div>
+    <div class="nav-item"><span>💬</span>Chat</div>
+    <div class="nav-item"><span>⋯</span>More</div>
+  </div>
+</div>
+
+<div id="game-screen">
+  <div id="world">
+    <div class="ground"></div>
+    <div id="objects"></div>
+    <div id="player">
+      <div class="p-body" id="p-body">
+        <div class="p-head"><div class="p-face"><div class="eye"></div><div class="eye"></div></div></div>
+        <div class="p-hat" id="p-hat"></div>
+      </div>
+    </div>
+  </div>
+  <div class="game-hud">
+    <div class="hud-left">
+      <div class="game-name-hud" id="gname">Brookhaven RP</div>
+      <div class="score" id="score">Score: 0</div>
+    </div>
+    <button class="leave-btn" onclick="leaveGame()">Leave</button>
+  </div>
+  <div class="hint" id="hint">Move • Jump • Collect</div>
+  <div class="controls">
+    <div class="joystick-area" id="joystick"><div class="joystick-knob" id="knob"></div></div>
+    <div class="jump-btn" id="jumpBtn">JUMP</div>
+  </div>
+</div>
+
+<script>
+const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+function playSound(type) {
+  try {
+    const osc = audioCtx.createOscillator();
+    const gain = audioCtx.createGain();
+    osc.connect(gain); gain.connect(audioCtx.destination);
+    const now = audioCtx.currentTime;
+    if (type === 'jump') {
+      osc.frequency.setValueAtTime(280, now);
+      osc.frequency.exponentialRampToValueAtTime(620, now + 0.12);
+      gain.gain.setValueAtTime(0.14, now);
+      gain.gain.exponentialRampToValueAtTime(0.01, now + 0.15);
+      osc.start(now); osc.stop(now + 0.15);
+    } else if (type === 'collect') {
+      osc.frequency.setValueAtTime(780, now);
+      osc.frequency.exponentialRampToValueAtTime(1300, now + 0.09);
+      gain.gain.setValueAtTime(0.11, now);
+      gain.gain.exponentialRampToValueAtTime(0.01, now + 0.12);
+      osc.start(now); osc.stop(now + 0.12);
+    } else if (type === 'buy' || type === 'code') {
+      osc.type = 'square';
+      osc.frequency.setValueAtTime(420, now);
+      osc.frequency.setValueAtTime(680, now + 0.1);
+      gain.gain.setValueAtTime(0.1, now);
+      gain.gain.exponentialRampToValueAtTime(0.01, now + 0.22);
+      osc.start(now); osc.stop(now + 0.22);
+    }
+  } catch(e){}
+}
+
+let robux = 100;
+let equipped = { hat: "", face: "", clothes: "#00a2ff" };
+let owned = new Set();
+
+const allGames = [
+  {name:"Brookhaven RP",icon:"🏠",players:"312K"},{name:"Blox Fruits",icon:"⚔️",players:"891K"},
+  {name:"Adopt Me!",icon:"🐾",players:"245K"},{name:"Doors",icon:"🚪",players:"178K"},
+  {name:"Jailbreak",icon:"🚔",players:"96K"},{name:"Pet Simulator 99",icon:"🐱",players:"203K"},
+  {name:"Murder Mystery 2",icon:"🔪",players:"187K"},{name:"Tower of Hell",icon:"🗼",players:"142K"},
+  {name:"Arsenal",icon:"🔫",players:"89K"},{name:"Bee Swarm Simulator",icon:"🐝",players:"67K"},
+  {name:"Natural Disaster Survival",icon:"🌪️",players:"54K"},{name:"Work at a Pizza Place",icon:"🍕",players:"78K"},
+  {name:"Royale High",icon:"👑",players:"112K"},{name:"MeepCity",icon:"🏡",players:"45K"},
+  {name:"Phantom Forces",icon:"💥",players:"61K"},{name:"Driving Empire",icon:"🏎️",players:"92K"},
+  {name:"Livetopia",icon:"🌆",players:"73K"},{name:"Anime Adventures",icon:"🍥",players:"128K"},
+  {name:"Da Hood",icon:"🕶️",players:"134K"},{name:"The Strongest Battlegrounds",icon:"💪",players:"156K"},
+  {name:"Fisch",icon:"🎣",players:"203K"},{name:"Grow a Garden",icon:"🌱",players:"312K"},
+  {name:"Blade Ball",icon:"🔵",players:"178K"},{name:"Sol's RNG",icon:"🎲",players:"145K"},
+  {name:"Toilet Tower Defense",icon:"🚽",players:"89K"},{name:"Rivals",icon:"⚔️",players:"97K"}
+];
+
+const catalog = {
+  hats:[{id:"h1",name:"Cool Cap",icon:"🧢",price:50},{id:"h2",name:"Crown",icon:"👑",price:250},{id:"h3",name:"Wizard",icon:"🧙",price:150},{id:"h4",name:"Helmet",icon:"⛑️",price:100},{id:"h5",name:"Top Hat",icon:"🎩",price:200},{id:"h6",name:"Party",icon:"🥳",price:75}],
+  faces:[{id:"f1",name:"Smile",icon:"😊",price:30},{id:"f2",name:"Cool",icon:"😎",price:80},{id:"f3",name:"Angry",icon:"😠",price:40},{id:"f4",name:"Heart",icon:"😍",price:120},{id:"f5",name:"Robot",icon:"🤖",price:200}],
+  clothes:[{id:"c1",name:"Blue",icon:"🔵",price:50,color:"#00a2ff"},{id:"c2",name:"Red",icon:"🔴",price:50,color:"#e74c3c"},{id:"c3",name:"Green",icon:"🟢",price:50,color:"#2ecc71"},{id:"c4",name:"Purple",icon:"🟣",price:80,color:"#9b59b6"},{id:"c5",name:"Gold",icon:"🟡",price:300,color:"#f1c40f"}],
+  accessories:[{id:"a1",name:"Sword",icon:"⚔️",price:150},{id:"a2",name:"Shield",icon:"🛡️",price:120},{id:"a3",name:"Wings",icon:"🪽",price:400},{id:"a4",name:"Guitar",icon:"🎸",price:180}]
+};
+
+function buildGameList(id, list) {
+  const el = document.getElementById(id);
+  el.innerHTML = '';
+  list.forEach(g => {
+    const card = document.createElement('div');
+    card.className = 'game-card';
+    card.onclick = () => enterGame(g.name);
+    card.innerHTML = `<div class="game-thumb">${g.icon}</div><div class="game-info"><div class="game-name">${g.name}</div><div class="game-players">${g.players} playing</div></div>`;
+    el.appendChild(card);
+  });
+}
+
+function updateRobux() {
+  const t = robux >= 999999999 ? "∞" : robux.toLocaleString();
+  document.getElementById('robux-display').textContent = t;
+  document.getElementById('robux-display2').textContent = t;
+}
+
+function showScreen(name) {
+  document.getElementById('home-screen').style.display = name === 'home' ? 'flex' : 'none';
+  document.getElementById('avatar-screen').style.display = name === 'avatar' ? 'flex' : 'none';
+  document.getElementById('game-screen').style.display = 'none';
+  if (name === 'avatar') showCategory('hats');
+}
+
+function showCategory(cat, el) {
+  document.querySelectorAll('.shop-tab').forEach(t => t.classList.remove('active'));
+  if (el) el.classList.add('active');
+  const grid = document.getElementById('items-grid');
+  grid.innerHTML = '';
+  catalog[cat].forEach(item => {
+    const ownedItem = owned.has(item.id);
+    const card = document.createElement('div');
+    card.className = 'item-card';
+    card.innerHTML = `<div class="item-icon">${item.icon}</div><div class="item-name">${item.name}</div><div class="item-price">${ownedItem ? 'Owned' : 'R$ ' + item.price}</div><button class="buy-btn" onclick="buyItem('${cat}','${item.id}')">${ownedItem ? 'Equip' : 'Buy'}</button>`;
+    grid.appendChild(card);
+  });
+}
+
+function buyItem(cat, id) {
+  const item = catalog[cat].find(i => i.id === id);
+  if (!item) return;
+  if (!owned.has(id)) {
+    if (robux < item.price) { alert('Not enough Robux!'); return; }
+    robux -= item.price;
+    owned.add(id);
+    updateRobux();
+    playSound('buy');
+  }
+  if (cat === 'hats') {
+    equipped.hat = item.icon;
+    document.getElementById('eq-hat').textContent = item.icon;
+    document.getElementById('p-hat').textContent = item.icon;
+  } else if (cat === 'faces') {
+    equipped.face = item.icon;
+    document.getElementById('eq-face').textContent = item.icon;
+  } else if (cat === 'clothes') {
+    equipped.clothes = item.color;
+    document.getElementById('big-body').style.background = item.color;
+    document.getElementById('p-body').style.background = item.color;
+  }
+  showCategory(cat);
+}
+
+function redeemCode() {
+  const val = document.getElementById('promo-input').value.trim();
+  if (val === '9211') {
+    robux = Infinity;
+    updateRobux();
+    playSound('code');
+    alert('🎉 Infinite Robux Unlocked!');
+    document.getElementById('promo-input').value = '';
+    return;
+  }
+  const amount = parseInt(val);
+  if (!isNaN(amount) && amount > 0) {
+    robux += amount;
+    updateRobux();
+    playSound('buy');
+    alert(`+${amount} Robux added!`);
+    document.getElementById('promo-input').value = '';
+    return;
+  }
+  alert('Invalid code');
+}
+
+function goHome() {
+  document.getElementById('signup-screen').style.display = 'none';
+  document.getElementById('home-screen').style.display = 'flex';
+  document.getElementById('avatar-screen').style.display = 'none';
+  document.getElementById('game-screen').style.display = 'none';
+  buildGameList('continue-games', allGames.slice(0, 6));
+  buildGameList('popular-games', allGames.slice(6, 16));
+  buildGameList('recommended-games', allGames.slice(16));
+  updateRobux();
+}
+
+function leaveGame() {
+  document.getElementById('game-screen').style.display = 'none';
+  document.getElementById('home-screen').style.display = 'flex';
+}
+
+const WORLD_SIZE = 3200;
+let score = 0, playerX = 1600, playerY = 1600, vx = 0, vy = 0, jumping = false;
+const MAX_SPEED = 7.2;
+
+const maps = {
+  "Brookhaven RP": {bg:"linear-gradient(#87CEEB,#98D8AA 55%,#4CAF50)",hint:"Explore the 3D town!",objs:[...Array.from({length:14},(_,i)=>({t:"house",x:180+i*210,y:380+((i%3)*300)})),...Array.from({length:20},(_,i)=>({t:"tree",x:90+i*150,y:280+((i%4)*320)})),...Array.from({length:28},(_,i)=>({t:"coin",x:140+i*105,y:320+((i%5)*210)}))]},
+  "Blox Fruits": {bg:"linear-gradient(#0077be,#00b4d8 40%,#48cae4)",hint:"Collect Devil Fruits!",objs:[...Array.from({length:11},(_,i)=>({t:"palm",x:140+i*250,y:280+((i%3)*360)})),{t:"fruit",x:480,y:480,e:"🍎"},{t:"fruit",x:880,y:680,e:"🍌"},{t:"fruit",x:1280,y:380,e:"🍇"},{t:"fruit",x:680,y:1080,e:"🍉"},{t:"fruit",x:1480,y:780,e:"🍊"},...Array.from({length:18},(_,i)=>({t:"coin",x:280+i*140,y:480+((i%3)*260)}))]},
+  "Adopt Me!": {bg:"linear-gradient(#ff9ff3,#feca57 45%,#48dbfb)",hint:"Collect cute pets!",objs:[...Array.from({length:9},(_,i)=>({t:"pet-house",x:180+i*290,y:340+((i%2)*420)})),{t:"pet",x:380,y:580,e:"🐶"},{t:"pet",x:780,y:430,e:"🐱"},{t:"pet",x:1180,y:680,e:"🐰"},{t:"pet",x:580,y:980,e:"🦊"},{t:"pet",x:1380,y:520,e:"🐻"},...Array.from({length:20},(_,i)=>({t:"coin",x:230+i*135,y:380+((i%4)*230)}))]},
+  "Doors": {bg:"linear-gradient(#0f0f1a,#1a1a2e 50%,#16213e)",hint:"Don't open the wrong door...",objs:[...Array.from({length:15},(_,i)=>({t:"wall",x:i*195,y:280})),...Array.from({length:11},(_,i)=>({t:"door",x:110+i*240,y:430}))]},
+  "Jailbreak": {bg:"linear-gradient(#2c3e50,#34495e 40%,#7f8c8d)",hint:"Escape the prison!",objs:[{t:"prison",x:1250,y:920},...Array.from({length:9},(_,i)=>({t:"car",x:180+i*290,y:380+((i%2)*520)})),...Array.from({length:22},(_,i)=>({t:"coin",x:190+i*125,y:480+((i%3)*260)}))]},
+  "Pet Simulator 99": {bg:"linear-gradient(#a8e6cf,#dcedc1 40%,#ffd3b6)",hint:"Catch every pet!",objs:[{t:"pet",x:380,y:380,e:"🦄"},{t:"pet",x:780,y:530,e:"🐉"},{t:"pet",x:1180,y:330,e:"🦖"},{t:"pet",x:580,y:880,e:"🦁"},{t:"pet",x:980,y:1080,e:"🐯"},{t:"pet",x:1480,y:620,e:"🦅"},...Array.from({length:32},(_,i)=>({t:"coin",x:160+i*90,y:280+((i%5)*190)}))]}
+};
+
+function getMap(name){return maps[name]||maps["Brookhaven RP"];}
+
+function enterGame(name) {
+  score = 0;
+  document.getElementById('score').textContent = 'Score: 0';
+  document.getElementById('gname').textContent = name;
+  const m = getMap(name);
+  document.getElementById('hint').textContent = m.hint;
+  document.getElementById('home-screen').style.display = 'none';
+  document.getElementById('avatar-screen').style.display = 'none';
+  document.getElementById('game-screen').style.display = 'block';
+  document.getElementById('world').style.background = m.bg;
+  document.getElementById('p-body').style.background = equipped.clothes;
+
+  const box = document.getElementById('objects');
+  box.innerHTML = '';
+  m.objs.forEach(o => {
+    const el = document.createElement('div');
+    el.className = 'obj ' + o.t;
+    el.style.left = o.x + 'px';
+    el.style.top = o.y + 'px';
+    if (o.e) el.textContent = o.e;
+    if (o.t === 'coin' || o.t === 'fruit' || o.t === 'pet') el.dataset.collect = '1';
+    box.appendChild(el);
+  });
+  playerX = 1600; playerY = 1600;
+  updateCamera();
+}
+
+function checkCollect() {
+  document.querySelectorAll('[data-collect]').forEach(el => {
+    const r = el.getBoundingClientRect();
+    const pr = document.getElementById('player').getBoundingClientRect();
+    if (Math.abs(r.left - pr.left) < 48 && Math.abs(r.top - pr.top) < 58) {
+      el.remove();
+      score += el.classList.contains('fruit') ? 50 : el.classList.contains('pet') ? 30 : 10;
+      document.getElementById('score').textContent = 'Score: ' + score;
+      playSound('collect');
+    }
+  });
+}
+
+const joy = document.getElementById('joystick');
+const knob = document.getElementById('knob');
+let active = false, sx, sy;
+function start(e){active=true;const t=e.touches?e.touches[0]:e;const r=joy.getBoundingClientRect();sx=r.left+r.width/2;sy=r.top+r.height/2;move(t.clientX,t.clientY)}
+function move(x,y){if(!active)return;let dx=x-sx,dy=y-sy;const max=50,d=Math.hypot(dx,dy);if(d>max){dx*=max/d;dy*=max/d}knob.style.transform=`translate(calc(-50% + ${dx}px),calc(-50% + ${dy}px))`;vx=(dx/max)*MAX_SPEED;vy=(dy/max)*MAX_SPEED}
+function end(){active=false;knob.style.transform='translate(-50%,-50%)';vx=0;vy=0}
+joy.addEventListener('touchstart',start,{passive:false});
+joy.addEventListener('touchmove',e=>{e.preventDefault();move(e.touches[0].clientX,e.touches[0].clientY)},{passive:false});
+joy.addEventListener('touchend',end);
+joy.addEventListener('mousedown',start);
+window.addEventListener('mousemove',e=>move(e.clientX,e.clientY));
+window.addEventListener('mouseup',end);
+
+document.getElementById('jumpBtn').addEventListener('touchstart',()=>{if(!jumping){jumping=true;vy=-13;playSound('jump');setTimeout(()=>jumping=false,480)}});
+document.getElementById('jumpBtn').addEventListener('mousedown',()=>{if(!jumping){jumping=true;vy=-13;playSound('jump');setTimeout(()=>jumping=false,480)}});
+
+function updateCamera(){
+  const camX=-(playerX-window.innerWidth/2);
+  const camY=-(playerY-window.innerHeight/2);
+  document.getElementById('world').style.transform=`translate(${camX}px,${camY}px)`;
+  document.getElementById('player').style.left=playerX+'px';
+  document.getElementById('player').style.top=playerY+'px';
+}
+
+function loop(){
+  if(document.getElementById('game-screen').style.display==='block'){
+    playerX+=vx;playerY+=vy;
+    playerX=Math.max(60,Math.min(WORLD_SIZE-60,playerX));
+    playerY=Math.max(60,Math.min(WORLD_SIZE-60,playerY));
+    updateCamera();
+    checkCollect();
+  }
+  requestAnimationFrame(loop);
+}
+loop();
+</script>
+</body>
+</html>
